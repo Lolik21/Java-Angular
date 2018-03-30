@@ -1,0 +1,32 @@
+<div class="center_div">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)" class="form">
+      <div class="form-group">
+        <label for="login">Логин:</label>
+        <input id="login" type="text" class="form-control" formControlName="login" required placeholder="Логин" [attr.disabled]="isLoading ? 'true' : null" />
+        <div *ngIf="formErrors.login" class="alert alert-danger">
+          {{ formErrors.login }}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Пароль:</label>
+        <input id="password" type="password" class="form-control" formControlName="password" required placeholder="Пароль" [attr.disabled]="isLoading ? 'true' : null" />
+        <div *ngIf="formErrors.password" class="alert alert-danger">
+          {{ formErrors.password }}
+        </div>
+      </div>
+      <div style="text-align:center">
+        <a [routerLink]="['/forgotpassword']">Забыли пароль?</a>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+      </div>​
+      <div [ngSwitch]="onCheck()">
+        <div *ngSwitchCase="'serverError'">
+          <button type="submit" class="btn btn-danger btn-block" disabled>{{ serverError }}
+          </button>
+        </div>
+        <div *ngSwitchDefault>
+          <button type="submit" class="btn btn-success btn-block" [disabled]="!loginForm.valid || isLoading">Войти
+            <i class="fa fa-spinner fa-spin" *ngIf="isLoading"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
