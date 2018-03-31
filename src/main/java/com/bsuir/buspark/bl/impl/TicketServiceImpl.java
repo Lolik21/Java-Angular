@@ -1,7 +1,7 @@
 package com.bsuir.buspark.bl.impl;
 
 import com.bsuir.buspark.bl.TicketService;
-import com.bsuir.buspark.bl.exception.TicketNotFoundException;
+import com.bsuir.buspark.bl.exception.BusNotFoundException;
 import com.bsuir.buspark.dal.TicketRepository;
 import com.bsuir.buspark.entity.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket update(int oldTicketId, Ticket ticket) {
         Ticket selectedTicket = ticketRepository.findById(oldTicketId).orElseThrow(
-                () -> new TicketNotFoundException("Cannot update ticket with requested ID"));
+                () -> new BusNotFoundException("Cannot update ticket with requested ID"));
         selectedTicket.setArrivalCity(ticket.getArrivalCity());
         selectedTicket.setArrivalTime(ticket.getArrivalTime());
         selectedTicket.setBus(ticket.getBus());
@@ -38,11 +38,13 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket read(int ticketId) {
         return ticketRepository.findById(ticketId).orElseThrow(
-                () -> new TicketNotFoundException("Cannot find ticket with requested ID"));
+                () -> new BusNotFoundException("Cannot find ticket with requested ID"));
     }
 
     @Override
     public void delete(int ticketId) {
+        ticketRepository.findById(ticketId).orElseThrow(
+                () -> new BusNotFoundException("Cannot delete ticket with requested ID"));
         ticketRepository.deleteById(ticketId);
     }
 

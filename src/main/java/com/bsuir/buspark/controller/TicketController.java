@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/tickets/")
 public class TicketController {
     @Autowired
-    TicketService ticketService;
+    private TicketService ticketService;
 
     private Validator validator = new TicketValidatorImpl();
 
@@ -44,6 +44,7 @@ public class TicketController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/{id}")
     Ticket updateTicket(@PathVariable int id, Ticket ticket){
+        this.validator.validate(ticket);
         return ticketService.update(id,ticket);
     }
 

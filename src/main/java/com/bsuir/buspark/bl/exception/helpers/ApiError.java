@@ -1,4 +1,4 @@
-package com.bsuir.buspark.bl.exception;
+package com.bsuir.buspark.bl.exception.helpers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;

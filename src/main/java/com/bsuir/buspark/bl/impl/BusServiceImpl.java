@@ -2,6 +2,7 @@ package com.bsuir.buspark.bl.impl;
 
 
 import com.bsuir.buspark.bl.BusService;
+import com.bsuir.buspark.bl.exception.BusNotFoundException;
 import com.bsuir.buspark.dal.BusRepository;
 import com.bsuir.buspark.entity.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ public class BusServiceImpl implements BusService {
 
     @Override
     public Bus update(int oldBusId, Bus bus) {
-        Bus selectedBus = busRepository.findById(Long.valueOf(oldBusId)).get();
+        Bus selectedBus = busRepository.findById(oldBusId).orElseThrow(
+                () -> new BusNotFoundException("Cannot update bus with requested Id")
+        );
         selectedBus.setCapacity(bus.getCapacity());
         selectedBus.setModel(bus.getModel());
         selectedBus.setGovNumber(bus.getGovNumber());
@@ -31,12 +34,17 @@ public class BusServiceImpl implements BusService {
 
     @Override
     public Bus read(int busId) {
-        return busRepository.findById(Long.valueOf(busId)).get();
+        return busRepository.findById(busId).orElseThrow(
+                () -> new BusNotFoundException("Cannot find bus with requested Id")
+        );
     }
 
     @Override
     public void delete(int busId) {
-        busRepository.deleteById(Long.valueOf(busId));
+        busRepository.findById(busId).orElseThrow(
+                () -> new BusNotFoundException("Cannot delete bus with requested Id")
+        );
+        busRepository.deleteById(busId);
     }
 
     @Override

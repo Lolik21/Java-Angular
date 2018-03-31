@@ -1,6 +1,7 @@
 package com.bsuir.buspark.bl.impl;
 
 import com.bsuir.buspark.bl.CityService;
+import com.bsuir.buspark.bl.exception.CityNotFoundException;
 import com.bsuir.buspark.dal.CityRepository;
 import com.bsuir.buspark.entity.City;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City update(int oldCityId, City city) {
-        City selectedCity = cityRepository.findById(Long.valueOf(oldCityId)).get();
+        City selectedCity = cityRepository.findById(oldCityId).orElseThrow(
+                () -> new CityNotFoundException("Cannot update city with requested ID")
+        );
         selectedCity.setDistance(city.getDistance());
         selectedCity.setName(city.getName());
         return cityRepository.save(selectedCity);
@@ -28,12 +31,17 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City read(int cityId) {
-        return cityRepository.findById(Long.valueOf(cityId)).get();
+        return cityRepository.findById(cityId).orElseThrow(
+                () -> new CityNotFoundException("Cannot find city with requested ID")
+        );
     }
 
     @Override
     public void delete(int cityId) {
-        cityRepository.deleteById(Long.valueOf(cityId));
+        cityRepository.findById(cityId).orElseThrow(
+                () -> new CityNotFoundException("Cannot delete city with requested ID")
+        );
+        cityRepository.deleteById(cityId);
     }
 
     @Override

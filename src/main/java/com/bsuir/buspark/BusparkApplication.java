@@ -84,6 +84,34 @@ public class BusparkApplication {
 			ticketService.create(ticket);
 			ticketService.create(ticket1);
 			ticketService.create(ticket2);
+
+
+//			Role userRole = new Role();
+//			userRole.setName("USER");
+//			roleService.create(userRole);
+//
+//			Role adminRole = new Role();
+//			userRole.setName("ADMIN");
+//			roleService.create(adminRole);
+//
+//			Role driverRole = new Role();
+//			driverRole.setName("DRIVER");
+//			roleService.create(driverRole);
+//
+//			User adminUser = new User();
+//			adminUser.setName("Ilya");
+//			adminUser.setSurname("Kremniou");
+//			adminUser.setUsername("SuperAdmin");
+//			adminUser.setPassword("123123123");
+//			userService.save(adminUser);
+//			userService.addRoleToUser(userService.findByUsername("SuperAdmin"), roleService.findByName("ADMIN"));
+//
+//			User simpleUser = new User();
+//			simpleUser.setName("Kostya");
+//			simpleUser.setSurname("Shutko");
+//			simpleUser.setUsername("SuperAdmin2");
+//			simpleUser.setPassword("123123123");
+//			userService.save(simpleUser);
 		};
 	}
 

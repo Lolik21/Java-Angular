@@ -1,6 +1,7 @@
 package com.bsuir.buspark.bl.impl;
 
 import com.bsuir.buspark.bl.RoleService;
+import com.bsuir.buspark.bl.exception.RoleNotFoundException;
 import com.bsuir.buspark.dal.RoleRepository;
 import com.bsuir.buspark.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role update(int oldRoleId, Role role) {
 
-        Role selectedRole = roleRepository.findById(Long.valueOf(oldRoleId)).get();
+        Role selectedRole = roleRepository.findById(oldRoleId).orElseThrow(
+                () -> new RoleNotFoundException("Cannot update role with requested ID")
+        );
         selectedRole.setName(role.getName());
         selectedRole.setUsers(role.getUsers());
         return roleRepository.save(selectedRole);
@@ -30,12 +33,17 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role read(int roleId) {
-        return roleRepository.findById(Long.valueOf(roleId)).get();
+        return roleRepository.findById(roleId).orElseThrow(
+                () -> new RoleNotFoundException("Cannot find role with requested ID")
+        );
     }
 
     @Override
     public void delete(int roleId) {
-        roleRepository.deleteById(Long.valueOf(roleId));
+        roleRepository.findById(roleId).orElseThrow(
+                () -> new RoleNotFoundException("Cannot delete role with requested ID")
+        );
+        roleRepository.deleteById(roleId);
     }
 
     @Override

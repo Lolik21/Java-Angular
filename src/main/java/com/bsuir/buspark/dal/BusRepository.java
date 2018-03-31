@@ -4,5 +4,5 @@ import com.bsuir.buspark.entity.Bus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface BusRepository extends JpaRepository<Bus, Long> {
+public interface BusRepository extends JpaRepository<Bus, Integer> {
 }
