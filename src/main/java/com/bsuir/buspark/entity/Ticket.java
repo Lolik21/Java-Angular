@@ -1,5 +1,6 @@
 package com.bsuir.buspark.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

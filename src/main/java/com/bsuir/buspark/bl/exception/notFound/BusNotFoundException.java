@@ -1,15 +1,17 @@
-package com.bsuir.buspark.bl.exception;
+package com.bsuir.buspark.bl.exception.notFound;
 
+import com.bsuir.buspark.bl.exception.MyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class BusNotFoundException extends RuntimeException {
+public class BusNotFoundException extends MyException {
+
     public BusNotFoundException() {
     }
 
     public BusNotFoundException(String message) {
         super (message);
+        httpStatus = HttpStatus.NOT_FOUND;
     }
 
     public BusNotFoundException(Throwable cause) {

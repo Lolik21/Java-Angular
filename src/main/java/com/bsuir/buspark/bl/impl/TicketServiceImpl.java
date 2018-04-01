@@ -1,7 +1,7 @@
 package com.bsuir.buspark.bl.impl;
 
 import com.bsuir.buspark.bl.TicketService;
-import com.bsuir.buspark.bl.exception.BusNotFoundException;
+import com.bsuir.buspark.bl.exception.notFound.BusNotFoundException;
 import com.bsuir.buspark.dal.TicketRepository;
 import com.bsuir.buspark.entity.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;

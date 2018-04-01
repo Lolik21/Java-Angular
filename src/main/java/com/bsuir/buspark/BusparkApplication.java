@@ -1,27 +1,31 @@
 package com.bsuir.buspark;
 
-import com.bsuir.buspark.bl.BusService;
-import com.bsuir.buspark.bl.CityService;
-import com.bsuir.buspark.bl.RoleService;
-import com.bsuir.buspark.bl.TicketService;
-import com.bsuir.buspark.entity.Bus;
-import com.bsuir.buspark.entity.City;
-import com.bsuir.buspark.entity.Ticket;
+import com.bsuir.buspark.bl.*;
+import com.bsuir.buspark.bl.impl.user.UserDetailsServiceImpl;
+import com.bsuir.buspark.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
+import java.util.HashSet;
 
 @SpringBootApplication
 public class BusparkApplication {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Bean
 	CommandLineRunner init(TicketService ticketService,
 						   RoleService roleService,
 						   CityService cityService,
-						   BusService busService) {
+						   BusService busService,
+						   UserService userService) {
 		return (evt) -> {
 			City cityMinsk = new City();
 			cityMinsk.setName("Minsk");
@@ -86,36 +90,53 @@ public class BusparkApplication {
 			ticketService.create(ticket2);
 
 
-//			Role userRole = new Role();
-//			userRole.setName("USER");
-//			roleService.create(userRole);
-//
-//			Role adminRole = new Role();
-//			userRole.setName("ADMIN");
-//			roleService.create(adminRole);
-//
-//			Role driverRole = new Role();
-//			driverRole.setName("DRIVER");
-//			roleService.create(driverRole);
-//
-//			User adminUser = new User();
-//			adminUser.setName("Ilya");
-//			adminUser.setSurname("Kremniou");
-//			adminUser.setUsername("SuperAdmin");
-//			adminUser.setPassword("123123123");
-//			userService.save(adminUser);
-//			userService.addRoleToUser(userService.findByUsername("SuperAdmin"), roleService.findByName("ADMIN"));
-//
-//			User simpleUser = new User();
-//			simpleUser.setName("Kostya");
-//			simpleUser.setSurname("Shutko");
-//			simpleUser.setUsername("SuperAdmin2");
-//			simpleUser.setPassword("123123123");
-//			userService.save(simpleUser);
+			Role userRole = new Role();
+			userRole.setName("USER");
+			userRole = roleService.create(userRole);
+
+			Role userRole2 = new Role();
+			userRole2.setName("USER");
+			userRole2 = roleService.create(userRole2);
+
+			Role adminRole = new Role();
+			adminRole.setName("ADMIN");
+			adminRole = roleService.create(adminRole);
+
+			Role driverRole = new Role();
+			driverRole.setName("DRIVER");
+			driverRole = roleService.create(driverRole);
+
+			User adminUser = new User();
+			adminUser.setName("Ilya");
+			adminUser.setSurname("Kremniou");
+			adminUser.setUsername("SuperAdmin");
+			adminUser.setPassword("123123123");
+			HashSet<Role> adminRoleSet = new HashSet<>();
+			adminRoleSet.add(adminRole);
+			adminRoleSet.add(userRole);
+			adminUser.setRoles(adminRoleSet);
+			userService.save(adminUser);
+
+			User simpleUser = new User();
+			simpleUser.setName("Kostya");
+			simpleUser.setSurname("Shutko");
+			simpleUser.setUsername("SuperAdmin2");
+			simpleUser.setPassword("123123123");
+			HashSet<Role> driverRoleSet = new HashSet<>();
+			driverRoleSet.add(driverRole);
+			driverRoleSet.add(userRole2);
+			simpleUser.setRoles(driverRoleSet);
+			userService.save(simpleUser);
 		};
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(BusparkApplication.class, args);
 	}
+
+	@Autowired
+	public void authenticationManager(AuthenticationManagerBuilder authenticationManagerBuilder) throws  Exception {
+		authenticationManagerBuilder.userDetailsService(new UserDetailsServiceImpl()).passwordEncoder(passwordEncoder);
+	}
+
 }

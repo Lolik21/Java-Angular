@@ -1,15 +1,16 @@
-package com.bsuir.buspark.bl.exception;
+package com.bsuir.buspark.bl.exception.notFound;
 
+import com.bsuir.buspark.bl.exception.MyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class CityNotFoundException extends RuntimeException {
+public class CityNotFoundException extends MyException {
     public CityNotFoundException() {
     }
 
     public CityNotFoundException(String message) {
         super (message);
+        httpStatus = HttpStatus.NOT_FOUND;
     }
 
     public CityNotFoundException(Throwable cause) {

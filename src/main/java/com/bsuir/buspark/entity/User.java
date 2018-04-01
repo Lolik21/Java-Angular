@@ -1,7 +1,9 @@
 package com.bsuir.buspark.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -14,17 +16,17 @@ public class User {
     private String passwordConfirm;
     private Set<Role> roles;
 
-    @OneToMany
-    @JoinColumn(name="tickets")
-    public Set<Ticket> getTickets() {
+
+    public String getTickets() {
         return tickets;
     }
 
-    public void setTickets(Set<Ticket> tickets) {
+    public void setTickets(String tickets) {
         this.tickets = tickets;
     }
 
-    private Set<Ticket> tickets;
+    private String tickets;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,9 +79,7 @@ public class User {
         this.surname = surname;
     }
 
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OneToMany
     public Set<Role> getRoles() {
         return roles;
     }

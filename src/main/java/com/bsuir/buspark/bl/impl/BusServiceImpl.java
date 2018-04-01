@@ -2,19 +2,23 @@ package com.bsuir.buspark.bl.impl;
 
 
 import com.bsuir.buspark.bl.BusService;
-import com.bsuir.buspark.bl.exception.BusNotFoundException;
+import com.bsuir.buspark.bl.exception.other.BusIsNowInUseException;
+import com.bsuir.buspark.bl.exception.notFound.BusNotFoundException;
 import com.bsuir.buspark.dal.BusRepository;
+import com.bsuir.buspark.dal.TicketRepository;
 import com.bsuir.buspark.entity.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BusServiceImpl implements BusService {
     @Autowired
     private BusRepository busRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Override
     public Bus create(Bus bus) {
@@ -41,10 +45,17 @@ public class BusServiceImpl implements BusService {
 
     @Override
     public void delete(int busId) {
-        busRepository.findById(busId).orElseThrow(
+        Bus bus = busRepository.findById(busId).orElseThrow(
                 () -> new BusNotFoundException("Cannot delete bus with requested Id")
         );
-        busRepository.deleteById(busId);
+
+        if (ticketRepository.findByBus(bus).isEmpty()){
+            busRepository.deleteById(busId);
+        }
+        else
+        {
+            throw new BusIsNowInUseException("Bus is now in use");
+        }
     }
 
     @Override

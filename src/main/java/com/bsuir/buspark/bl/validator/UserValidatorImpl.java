@@ -1,80 +1,106 @@
-//package com.bsuir.buspark.bl.validator;
-//
-//import com.ilyashutko.buspark.bl.UserService;
-//import com.ilyashutko.buspark.model.User;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
-//import org.springframework.validation.Errors;
-//import org.springframework.validation.ValidationUtils;
-//import org.springframework.validation.Validator;
-//
-//import java.util.regex.Pattern;
-//
-//@Component
-//public class UserValidator implements Validator {
-//    @Autowired
-//    private UserService userService;
-//
-//    @Override
-//    public boolean supports(Class<?> aClass) {
-//        return User.class.equals(aClass);
-//    }
-//
-//    @Override
-//    public void validate(Object o, Errors errors) {
-//        User user = (User) o;
-//
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "surname", "NotEmpty");
-//
-//        if (user.getUsername().length() < 8 || user.getUsername().length() > 32) {
-//            errors.rejectValue("username", "Size.userForm.username");
-//        }
-//        if (userService.findByUsername(user.getUsername()) != null) {
-//            errors.rejectValue("username", "Duplicate.userForm.username");
-//        }
-//
-//        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
-//            errors.rejectValue("password", "Size.userForm.password");
-//        }
-//
-//        if (!user.getPasswordConfirm().equals(user.getPassword())) {
-//            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
-//        }
-//
-//        if (user.getName().length() < 2){
-//            errors.rejectValue("name", "Size.name.surname.small");
-//        }
-//
-//        if (user.getName().length() > 100){
-//            errors.rejectValue("name", "Size.name.surname.big");
-//        }
-//
-//        if (user.getSurname().length() < 2){
-//            errors.rejectValue("surname", "Size.name.surname.small");
-//        }
-//
-//        if (user.getSurname().length() > 100){
-//            errors.rejectValue("surname", "Size.name.surname.big");
-//        }
-//
-//        Pattern pattern = Pattern.compile("^[a-z,A-Z]+$");
-//
-//        if (!pattern.matcher(user.getName()).matches()){
-//            errors.rejectValue("name", "Name.surname.patternMissmatch");
-//        }
-//
-//        if (!pattern.matcher(user.getSurname()).matches()){
-//            errors.rejectValue("surname", "Name.surname.patternMissmatch");
-//        }
-//
-//        Pattern patternLogin = Pattern.compile("^[a-z,A-Z,0-9]+$");
-//
-//        if (!patternLogin.matcher(user.getUsername()).matches()){
-//            errors.rejectValue("username", "Name.surname.patternMissmatch");
-//        }
-//    }
-//}
+package com.bsuir.buspark.bl.validator;
+
+import com.bsuir.buspark.bl.UserService;
+import com.bsuir.buspark.bl.exception.validation.UserValidationException;
+import com.bsuir.buspark.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
+
+
+public class UserValidatorImpl implements Validator {
+
+    private UserService userService;
+
+    public UserValidatorImpl(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Override
+    public void validate(Object classToValidate) {
+        User user = (User) classToValidate;
+
+        if (user == null)
+        {
+            throw new UserValidationException("User is null");
+        }
+
+        if (user.getUsername() == null)
+        {
+            throw new UserValidationException("Username is required");
+        }
+
+        if (user.getName() == null)
+        {
+            throw new UserValidationException("Name is required");
+        }
+
+        if (user.getSurname() == null)
+        {
+            throw new UserValidationException("Surname is required");
+        }
+
+        if (user.getPassword() == null)
+        {
+            throw new UserValidationException("Password is required");
+        }
+
+        if (user.getPasswordConfirm() == null)
+        {
+            throw new UserValidationException("Password conformation is required");
+        }
+
+        if (user.getUsername().length() < 8 || user.getUsername().length() > 32) {
+            throw new UserValidationException("Username filed must be 8 to 32 characters long");
+        }
+        if (userService.findByUsername(user.getUsername()) != null) {
+            throw new UserValidationException("User is already exists in database");
+        }
+
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
+            throw new UserValidationException("Password be 8 to 32 characters long");
+        }
+
+        if (!user.getPasswordConfirm().equals(user.getPassword())) {
+            throw new UserValidationException("Password conformation is failed");
+        }
+
+        if (user.getName().length() < 2){
+            throw new UserValidationException("Name filed must be 2 to 100 characters long");
+        }
+
+        if (user.getName().length() > 100){
+            throw new UserValidationException("Name filed must be 2 to 100 characters long");
+        }
+
+        if (user.getSurname().length() < 2){
+            throw new UserValidationException("Surname filed must be 2 to 100 characters long");
+        }
+
+        if (user.getSurname().length() > 100){
+            throw new UserValidationException("Surname filed must be 2 to 100 characters long");
+        }
+
+        Pattern pattern = Pattern.compile("^[a-z,A-Z]+$");
+
+        if (!pattern.matcher(user.getName()).matches()){
+            throw new UserValidationException("Name pattern mismatch");
+        }
+
+        if (!pattern.matcher(user.getSurname()).matches()){
+            throw new UserValidationException("Surname pattern mismatch");
+        }
+
+        Pattern patternLogin = Pattern.compile("^[a-z,A-Z,0-9]+$");
+
+        if (!patternLogin.matcher(user.getUsername()).matches()){
+            throw new UserValidationException("Username pattern mismatch");
+        }
+
+        if (!patternLogin.matcher(user.getPassword()).matches()){
+            throw new UserValidationException("Password pattern mismatch");
+        }
+    }
+}

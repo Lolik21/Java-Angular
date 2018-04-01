@@ -5,10 +5,8 @@ import com.bsuir.buspark.bl.validator.BusValidatorImpl;
 import com.bsuir.buspark.bl.validator.Validator;
 import com.bsuir.buspark.entity.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +23,7 @@ public class BusController {
         return this.busService.getAll();
     }
 
+    @ResponseStatus(value = HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/")
     Bus addNewBus(Bus bus) {
         this.validator.validate(bus);
@@ -42,7 +41,7 @@ public class BusController {
         return busService.read(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     Bus updateTicket(@PathVariable int id, Bus bus){
         this.validator.validate(bus);
         return busService.update(id, bus);

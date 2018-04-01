@@ -1,14 +1,14 @@
 package com.bsuir.buspark.controller;
 import com.bsuir.buspark.bl.RoleService;
+import com.bsuir.buspark.bl.UserService;
 import com.bsuir.buspark.bl.validator.RoleValidatorImpl;
 import com.bsuir.buspark.bl.validator.Validator;
 import com.bsuir.buspark.entity.City;
 import com.bsuir.buspark.entity.Role;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,18 +17,14 @@ import java.util.List;
 public class RoleController {
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private UserService userService;
 
     private Validator validator = new RoleValidatorImpl();
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
     List<Role> getAllRoles() {
         return this.roleService.getAll();
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/")
-    Role addNewRole(Role role) {
-        this.validator.validate(role);
-        return this.roleService.create(role);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -42,9 +38,10 @@ public class RoleController {
         return roleService.read(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/{id}")
-    Role updateRole(@PathVariable int id, Role role){
-        this.validator.validate(role);
-        return roleService.update(id, role);
+    @RequestMapping(method = RequestMethod.PUT, value = "/{userId}")
+    void addRoleToUser(@PathVariable int userId, Role role)
+    {
+        validator.validate(role);
+        userService.addRoleToUser(userId,role);
     }
 }
