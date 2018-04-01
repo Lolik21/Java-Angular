@@ -23,7 +23,7 @@ public class CityValidatorImpl implements Validator {
             throw new CityValidationException("City distance can be only from 1 to 10000 km");
         }
 
-        Pattern pattern = Pattern.compile("^[a-z,A-Z]+$");
+        Pattern pattern = Pattern.compile("^[a-z,A-Z ]+$");
         if (!pattern.matcher(city.getName()).matches()){
             throw new CityValidationException("City name pattern mismatch");
         }
