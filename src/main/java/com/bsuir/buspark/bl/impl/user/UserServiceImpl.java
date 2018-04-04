@@ -128,6 +128,8 @@ public class UserServiceImpl implements UserService {
 
             ticket.setCount(ticket.getCount() - 1);
 
+            ticketRepository.save(ticket);
+
             repo.save(user);
         }
         else
@@ -184,6 +186,10 @@ public class UserServiceImpl implements UserService {
         Integer toRemove = ticketId;
         integerList.remove(toRemove);
         user.setTickets(userHelpers.getTicketStr(integerList));
+
+        ticket.setCount(ticket.getCount() + 1);
+
+        ticketRepository.save(ticket);
         repo.save(user);
     }
 

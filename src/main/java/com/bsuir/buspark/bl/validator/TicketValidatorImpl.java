@@ -36,12 +36,23 @@ public class TicketValidatorImpl implements Validator {
             throw new TicketValidationException("Department city cannot be null.");
         }
 
+
+        if (ticket.getArrivalTime() == null)
+        {
+            throw new TicketValidationException("Arrival time cannot be null.");
+        }
+
+        if (ticket.getDepartmentTime() == null)
+        {
+            throw new TicketValidationException("Department time cannot be null.");
+        }
+
         if (ticket.getBus() == null)
         {
             throw new TicketValidationException("Bus cannot be null.");
         }
 
-        if (ticket.getDistance() <= 1 && ticket.getDistance() > 10000)
+        if (ticket.getDistance() < 1 || ticket.getDistance() > 10000)
         {
             throw new TicketValidationException("Distance can only be from 1 - 10000 km long");
         }
@@ -51,9 +62,11 @@ public class TicketValidatorImpl implements Validator {
             throw new TicketValidationException("Driver cannot be null");
         }
 
-        if (ticket.getIsInternational() != "International" || ticket.getIsInternational() != "notInternational")
+        if (!ticket.getIsInternational().equalsIgnoreCase("International"))
         {
-            throw new TicketValidationException("International fild can only be International or notInternational");
+            if (!ticket.getIsInternational().equalsIgnoreCase("notInternational"))
+
+            throw new TicketValidationException("International field can only be International or notInternational");
         }
 
         if (ticket.getArrivalTime() == null)
