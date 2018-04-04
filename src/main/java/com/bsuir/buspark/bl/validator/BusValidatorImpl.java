@@ -18,14 +18,24 @@ public class BusValidatorImpl implements Validator {
             throw new BusValidationException("Bus is null");
         }
 
-        Pattern patternLogin = Pattern.compile("^[a-z,A-Z,0-9]+$");
+        if (bus.getGovNumber() == null)
+        {
+            throw new BusValidationException("Gov number is null");
+        }
+
+        if (bus.getModel() == null)
+        {
+            throw new BusValidationException("Model name is null");
+        }
+
+        Pattern patternLogin = Pattern.compile("^[a-z,A-Z,0-9 ]+$");
 
         if (!patternLogin.matcher(bus.getGovNumber()).matches()){
             throw new BusValidationException("Gov number pattern mismatch");
         }
 
         if (!patternLogin.matcher(bus.getModel()).matches()){
-            throw new BusValidationException("Gov number pattern mismatch");
+            throw new BusValidationException("Model pattern mismatch");
         }
 
         if (bus.getCapacity() < 1 || bus.getCapacity() > 100)
