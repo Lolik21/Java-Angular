@@ -17,6 +17,11 @@ public class RoleValidatorImpl implements Validator {
             throw new UserValidationException("Role is null");
         }
 
+        if (role.getName() == null)
+        {
+            throw new UserValidationException("Role name is null");
+        }
+
         Pattern pattern = Pattern.compile("^[a-z,A-Z]+$");
 
         if (!pattern.matcher(role.getName()).matches()){
