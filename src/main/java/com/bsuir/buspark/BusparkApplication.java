@@ -57,39 +57,6 @@ public class BusparkApplication {
 			busService.create(bus1);
 			busService.create(bus2);
 
-
-			Ticket ticket = new Ticket();
-			ticket.setArrivalCity(cityMinsk);
-			ticket.setDepartmentCity(cityGrodno);
-			ticket.setArrivalTime(new Date(System.currentTimeMillis()));
-			ticket.setDepartmentTime(new Date(System.currentTimeMillis()));
-			ticket.setBus(bus);
-			ticket.setCount(100);
-			ticket.setDistance(1000);
-			ticket.setIsInternational("international");
-			Ticket ticket1 = new Ticket();
-			ticket1.setArrivalCity(cityMinsk);
-			ticket1.setDepartmentCity(cityGrodno);
-			ticket1.setArrivalTime(new Date(System.currentTimeMillis()));
-			ticket1.setDepartmentTime(new Date(System.currentTimeMillis()));
-			ticket1.setBus(bus);
-			ticket1.setCount(100);
-			ticket1.setDistance(1000);
-			ticket1.setIsInternational("international");
-			Ticket ticket2 = new Ticket();
-			ticket2.setArrivalCity(cityMinsk);
-			ticket2.setDepartmentCity(cityGrodno);
-			ticket2.setArrivalTime(new Date(System.currentTimeMillis()));
-			ticket2.setDepartmentTime(new Date(System.currentTimeMillis()));
-			ticket2.setBus(bus);
-			ticket2.setCount(100);
-			ticket2.setDistance(1000);
-			ticket2.setIsInternational("international");
-			ticketService.create(ticket);
-			ticketService.create(ticket1);
-			ticketService.create(ticket2);
-
-
 			Role userRole = new Role();
 			userRole.setName("USER");
 			userRole = roleService.create(userRole);
@@ -126,7 +93,42 @@ public class BusparkApplication {
 			driverRoleSet.add(driverRole);
 			driverRoleSet.add(userRole2);
 			simpleUser.setRoles(driverRoleSet);
-			userService.save(simpleUser);
+			simpleUser = userService.save(simpleUser);
+
+			Ticket ticket = new Ticket();
+			ticket.setArrivalCity(cityMinsk);
+			ticket.setDepartmentCity(cityGrodno);
+			ticket.setArrivalTime(new Date(System.currentTimeMillis()));
+			ticket.setDepartmentTime(new Date(System.currentTimeMillis()));
+			ticket.setBus(bus);
+			ticket.setCount(100);
+			ticket.setDistance(1000);
+			ticket.setIsInternational("International");
+			ticket.setDriver(simpleUser);
+			Ticket ticket1 = new Ticket();
+			ticket1.setArrivalCity(cityMinsk);
+			ticket1.setDepartmentCity(cityGrodno);
+			ticket1.setArrivalTime(new Date(System.currentTimeMillis()));
+			ticket1.setDepartmentTime(new Date(System.currentTimeMillis()));
+			ticket1.setBus(bus);
+			ticket1.setCount(100);
+			ticket1.setDistance(1000);
+			ticket1.setDriver(simpleUser);
+			ticket1.setIsInternational("International");
+			Ticket ticket2 = new Ticket();
+			ticket2.setArrivalCity(cityMinsk);
+			ticket2.setDepartmentCity(cityGrodno);
+			ticket2.setArrivalTime(new Date(System.currentTimeMillis()));
+			ticket2.setDepartmentTime(new Date(System.currentTimeMillis()));
+			ticket2.setBus(bus);
+			ticket2.setCount(100);
+			ticket2.setDistance(1000);
+			ticket2.setDriver(simpleUser);
+			ticket2.setIsInternational("notInternational");
+			ticketService.create(ticket);
+			ticketService.create(ticket1);
+			ticketService.create(ticket2);
+
 		};
 	}
 

@@ -52,4 +52,15 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> getAll() {
         return ticketRepository.findAll();
     }
+
+    @Override
+    public List<Ticket> getAllInternational() {
+        return ticketRepository.findByIsInternational("International");
+    }
+
+    @Override
+    public List<Ticket> getAllNotInternational() {
+        return ticketRepository.findByIsInternational("notInternational");
+    }
+
 }

@@ -9,4 +9,6 @@ public interface TicketService {
     Ticket read(int ticketId);
     void delete(int ticketId);
     List<Ticket> getAll();
+    List<Ticket> getAllInternational();
+    List<Ticket> getAllNotInternational();
 }
